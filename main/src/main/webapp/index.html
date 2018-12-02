@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>DMI observation data</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body>
+<header>
+    <div class="jumbotron text-center">
+        <h1>DMI</h1>
+        <h2>observationsdata</h2>
+    </div>
+</header>
+<section class="container">
+    <div class="row">
+        <h2>Data for en periode</h2>
+    </div>
+    <div class="row col-sm-4">
+
+        <form id="period" onsubmit="return call('period')">
+            <div class="form-group">
+                <label for="startDate">Startdato</label><input type="text" class="form-control" id="startDate"
+                                                               name="startDate" placeholder="dd-MM-yyyy HH:mm">
+            </div>
+            <div class="form-group">
+                <label for="endDate">Slutdato</label><input type="text" class="form-control" id="endDate" name="endDate"
+                                                            placeholder="dd-MM-yyyy HH:mm">
+            </div>
+            <!--<div class="form-group">-->
+            <!--<label for="limit">Max records</label><input type="number" class="form-control" id="limit">-->
+            <!--</div>-->
+            <button type="submit" class="btn btn-success">Hent data</button>
+        </form>
+
+    </div>
+    <div class="row col-sm-12">
+        <br>
+        <div class="panel panel-default" style="display: none" id="result-period-pnl">
+            <div class="panel-body" style="max-height: 400px; overflow-y: scroll">
+                <pre id="result-period"></pre>
+                <iframe id="error-period" style="width: 100%"></iframe>
+            </div>
+        </div>
+
+    </div>
+</section>
+<br/>
+<section class="container">
+    <div class="row">
+        <hr style="color: black">
+        <h2>Seneste data for en station</h2>
+    </div>
+    <div class="row col-sm-4">
+        <form id="station" onsubmit="return call('station')">
+            <div class="form-group">
+                <label for="stationId">Station</label>
+                <select name="stationId" id="stationId" class="form-control">
+                    <option value="">Vælg station</option>
+                    <option value="512220">512220 Viborg Hedeselskabet</option>
+                    <option value="618000">618000 Københavns lufthavn</option>
+                    <option value="618100">618100 Jægersborg</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success">Hent data</button>
+        </form>
+
+    </div>
+    <div class="row col-sm-12">
+        <br>
+        <div class="panel panel-default" style="display: none" id="result-station-pnl">
+            <div class="panel-body" style="max-height: 400px; overflow-y: scroll">
+                <pre id="result-station"></pre>
+                <iframe id="error-station" style="width: 100%"></iframe>
+            </div>
+        </div>
+
+    </div>
+</section>
+<br/>
+<section class="container">
+    <div class="row">
+        <hr style="color: black">
+        <h2>Seneste data for udvalgte parametre for en station</h2>
+    </div>
+    <div class="row col-sm-4">
+        <form id="station-parameter" onsubmit="return call('station-parameter')">
+            <div class="form-group">
+                <label for="station-parameter-stationId">Station</label>
+                <select name="stationId" id="station-parameter-stationId" class="form-control">
+                    <option value="">Vælg station</option>
+                    <option value="512220">512220 Viborg Hedeselskabet</option>
+                    <option value="618000">618000 Københavns lufthavn</option>
+                    <option value="618100">618100 Jægersborg</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="parameter">Parametre</label>
+                <select name="parameter" id="parameter" multiple class="form-control">
+                    <option value="temp_dry">Lufttemperatur</option>
+                    <option value="wind_dir">Vindretning</option>
+                    <option value="wind_speed">Vindhastighed</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success">Hent data</button>
+        </form>
+
+    </div>
+    <div class="row col-sm-12">
+        <br>
+        <div class="panel panel-default" style="display: none" id="result-station-parameter-pnl">
+            <div  class="panel-body" style="max-height: 400px; overflow-y: scroll">
+                <pre id="result-station-parameter"></pre>
+                <iframe id="error-station-parameter" style="width: 100%"></iframe>
+            </div>
+        </div>
+
+    </div>
+</section>
+<br/>
+<section class="container">
+    <div class="row">
+        <hr style="color: black">
+        <h2>Stationer i polygon</h2>
+    </div>
+    <div class="row col-sm-4">
+        <form id="station-location" onsubmit="return call('station-location')">
+            <div class="form-group">
+                <label for="station-location-coord">Polygonkoordinater</label>
+                <input name="coords" id="station-location-coord" class="form-control"></input>
+            </div>
+            <button type="submit" class="btn btn-success">Hent data</button>
+        </form>
+
+    </div>
+    <div class="row col-sm-12">
+        <br>
+        <div class="panel panel-default" style="display: none" id="result-station-location-pnl">
+            <div  class="panel-body" style="max-height: 400px; overflow-y: scroll">
+                <pre id="result-station-location"></pre>
+                <iframe id="error-station-location" style="width: 100%"></iframe>
+            </div>
+        </div>
+
+    </div>
+</section>
+<br/>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+<script type="text/javascript" language="JavaScript">
+    let latestEndPoint;
+
+    function call(endpoint) {
+
+    	        $.ajax({
+     type: "GET",
+     url: document.URL,
+     data: $("#" + endpoint).serialize(),
+     dataType: "json",
+     success: onSuccess,
+     error: onError
+ });
+//     	console.log("Hej fra frie data");
+     
+//     	latestEndPoint = endpoint;
+//         $("#result-" + latestEndPoint + "-pnl").css("display", "none");
+//         console.log($("#" + endpoint).serialize());
+//         console.log(endpoint);
+        
+     
+//         let prod="";
+//         if (!document.URL.includes("localhost")) {
+//             prod = "mapr/";
+//         }
+
+//         $.ajax({
+//             type: "GET",
+//             url: document.URL + prod + "webapi/temperaturmaalinger/" + endpoint.replace('-', '/'),
+//             data: $("#" + endpoint).serialize(),
+//             dataType: "json",
+//             success: onSuccess,
+//             error: onError
+//         });
+
+        return false;
+    }
+
+    function onSuccess(response) {
+        console.log("success " + latestEndPoint);
+        console.log(response);
+
+        $("#result-" + latestEndPoint + "-pnl").css("display", "block");
+        $("#result-" + latestEndPoint).css('background-color', '#c7f7ba');
+
+        let jsonPretty = JSON.stringify(response, null, '\t');
+        $("#result-" + latestEndPoint).text(jsonPretty);
+
+        $("#error-" + latestEndPoint).css("display", "none");
+        $("#result-" + latestEndPoint).css("display", "block");
+        $("#result-" + latestEndPoint).parent().css('background-color', "#ffffff");
+    }
+
+    function onError(response) {
+        console.log("error " + latestEndPoint);
+        console.log(response);
+
+        $("#result-" + latestEndPoint + "-pnl").css("display", "block");
+        document.getElementById('error-' + latestEndPoint).src = "data:text/html;charset=utf-8," + encodeURI(response.responseText);
+
+        $("#error-" + latestEndPoint).css("display", "block");
+        $("#error-" + latestEndPoint).parent().css('background-color', '#FFCCCC');
+        $("#result-" + latestEndPoint).css("display", "none");
+    }
+</script>
+</body>
+</html>
